@@ -1,4 +1,4 @@
-package com.adsonsa.controlefinanca.model.entity;
+package com.adsonsa.controlefinanca.model.enums;
 
 public enum TipoLancamento {
 	
