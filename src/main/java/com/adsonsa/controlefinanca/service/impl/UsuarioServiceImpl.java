@@ -1,8 +1,12 @@
 package com.adsonsa.controlefinanca.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.adsonsa.controlefinanca.exception.ErroAutenticacaoExecption;
 import com.adsonsa.controlefinanca.exception.RegraNegocioException;
 import com.adsonsa.controlefinanca.model.entity.Usuario;
 import com.adsonsa.controlefinanca.model.repository.UsuarioRepository;
@@ -21,14 +25,25 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 	@Override
 	public Usuario autenticar(String email, String senha) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Usuario> usuario = repository.findByEmail(email);
+		
+		// verificar se usuario existe
+		if (!usuario.isPresent()) {
+			throw new ErroAutenticacaoExecption("Usuario não encontrado para email informado");
+		}
+		// verificar se a senha confere
+		if (!usuario.get().getSenha().equals(senha)) {
+			throw new ErroAutenticacaoExecption("Senha inválida");
+		}
+		
+		return usuario.get();
 	}
 
 	@Override
+	@Transactional
 	public Usuario salvarUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+		validarEmail(usuario.getEmail());
+		return repository.save(usuario);
 	}
 
 	@Override
