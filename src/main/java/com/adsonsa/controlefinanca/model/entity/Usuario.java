@@ -32,7 +32,7 @@ public class Usuario {
 	@Column(name = "email")
 	private String email;
 	
-	@Column(name = "seha")
+	@Column(name = "senha")
 	private String senha;
 
 }
